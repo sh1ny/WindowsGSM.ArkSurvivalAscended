@@ -36,7 +36,7 @@ namespace WindowsGSM.Plugins
 
 
         // - Game server Fixed variables
-        public override string StartPath => @"ArkSurvivalAscendedServer.exe"; // Game server start path
+        public string StartPath = @"ShooterGame\Binaries\Win64\ShooterGameServer.exe"; // Game server start path
         public string FullName = "ArkSurvivalAscended Dedicated Server"; // Game server FullName
         public bool AllowsEmbedConsole = false;  // Does this server support output redirect?
         public int PortIncrements = 2; // This tells WindowsGSM how many ports should skip after installation
@@ -124,9 +124,9 @@ namespace WindowsGSM.Plugins
 
         public bool IsImportValid(string path)
         {
-            string exePath = Path.Combine(path, "PackageInfo.bin");
-            Error = $"Invalid Path! Fail to find {Path.GetFileName(exePath)}";
-            return File.Exists(exePath);
+            string importPath = Path.Combine(path, StartPath);
+            Error = $"Invalid Path! Fail to find {Path.GetFileName(StartPath)}";
+            return File.Exists(importPath);
         }
 
         public string GetLocalBuild()
