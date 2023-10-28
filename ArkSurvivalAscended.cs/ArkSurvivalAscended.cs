@@ -18,10 +18,10 @@ namespace WindowsGSM.Plugins
         public Plugin Plugin = new Plugin
         {
             name = "WindowsGSM.ArkSurvivalAscended", // WindowsGSM.XXXX
-            author = "kessef",
+            author = "sh1ny",
             description = "WindowsGSM plugin for supporting ArkSurvivalAscended Dedicated Server",
             version = "1.0",
-            url = "https://github.com/dkdue/WindowsGSM.ArkSurvivalAscended", // Github repository link (Best practice)
+            url = "https://github.com/sh1ny/WindowsGSM.ArkSurvivalAscended/", // Github repository link (Best practice)
             color = "#34c9eb" // Color Hex
         };
 
@@ -36,7 +36,7 @@ namespace WindowsGSM.Plugins
 
 
         // - Game server Fixed variables
-        public string StartPath = @"ShooterGame\Binaries\Win64\ShooterGameServer.exe"; // Game server start path
+        public string StartPath = @"ShooterGame\Binaries\Win64\ArkAscendedServer.exe"; // Game server start path
         public string FullName = "ArkSurvivalAscended Dedicated Server"; // Game server FullName
         public bool AllowsEmbedConsole = false;  // Does this server support output redirect?
         public int PortIncrements = 2; // This tells WindowsGSM how many ports should skip after installation
@@ -121,6 +121,7 @@ namespace WindowsGSM.Plugins
         public bool IsInstallValid()
         {
             return File.Exists(Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, StartPath));
+            //return true;
         }
 
         public bool IsImportValid(string path)
@@ -128,6 +129,7 @@ namespace WindowsGSM.Plugins
             string importPath = Path.Combine(path, StartPath);
             Error = $"Invalid Path! Fail to find {Path.GetFileName(StartPath)}";
             return File.Exists(importPath);
+            // return true;
         }
 
         public string GetLocalBuild()
