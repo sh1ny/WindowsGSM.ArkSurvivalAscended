@@ -44,8 +44,8 @@ namespace WindowsGSM.Plugins
 
 
         // - Game server default values
-        public string Port = "9876"; // Default port
-        public string QueryPort = "9877"; // Default query port
+        public string Port = "5290"; // Default port
+        public string QueryPort = "15290"; // Default query port
         public string Defaultmap = "TheIsland_WP"; // Default map name
         public string Maxplayers = "40"; // Default maxplayers
         public string Additional = ""; // Additional server start parameter
