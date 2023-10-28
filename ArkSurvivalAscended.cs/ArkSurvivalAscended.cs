@@ -26,7 +26,7 @@ namespace WindowsGSM.Plugins
         };
 
         // - Settings properties for SteamCMD installer
-        public override bool loginAnonymous => false;
+        public override bool loginAnonymous => true; // As of 25.18, login is no longer needed. Source: https://discord.com/channels/729837326120910915/735188487615283232/1167603768091754537
         public override string AppId => "2430930"; // Game server appId
 
         // - Standard Constructor and properties
