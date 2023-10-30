@@ -44,8 +44,8 @@ namespace WindowsGSM.Plugins
 
 
         // - Game server default values
-        public string Port = "5290"; // Default port
-        public string QueryPort = "15290"; // Default query port
+        public string Port = "7777"; // Default port
+        public string QueryPort = "27015"; // Default query port
         public string Defaultmap = "TheIsland_WP"; // Default map name
         public string Maxplayers = "40"; // Default maxplayers
         public string Additional = ""; // Additional server start parameter
@@ -70,11 +70,11 @@ namespace WindowsGSM.Plugins
             string param = string.IsNullOrWhiteSpace(_serverData.ServerMap) ? string.Empty : _serverData.ServerMap;
             param += "?listen";
             param += string.IsNullOrWhiteSpace(_serverData.ServerName) ? string.Empty : $"?SessionName=\"{_serverData.ServerName}\"";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerIP) ? string.Empty : $"?MultiHome={_serverData.ServerIP}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerPort) ? string.Empty : $"?Port={_serverData.ServerPort}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer) ? string.Empty : $"?MaxPlayers={_serverData.ServerMaxPlayer}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerQueryPort) ? string.Empty : $"?QueryPort={_serverData.ServerQueryPort}";
-            param += $"{_serverData.ServerParam} -server -log";
+            param += string.IsNullOrWhiteSpace(_serverData.ServerIP) ? string.Empty : $" ?MultiHome={_serverData.ServerIP}";
+            param += string.IsNullOrWhiteSpace(_serverData.ServerPort) ? string.Empty : $" ?Port={_serverData.ServerPort}";
+            param += string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer) ? string.Empty : $" ?MaxPlayers={_serverData.ServerMaxPlayer}";
+            param += string.IsNullOrWhiteSpace(_serverData.ServerQueryPort) ? string.Empty : $" ?QueryPort={_serverData.ServerQueryPort}";
+            param += $" {_serverData.ServerParam}";
 
             Process p = new Process
             {
@@ -83,7 +83,7 @@ namespace WindowsGSM.Plugins
                     FileName = shipExePath,
                     Arguments = param,
                     WindowStyle = ProcessWindowStyle.Minimized,
-                    UseShellExecute = false
+                    UseShellExecute = true
                 },
                 EnableRaisingEvents = true
             };
