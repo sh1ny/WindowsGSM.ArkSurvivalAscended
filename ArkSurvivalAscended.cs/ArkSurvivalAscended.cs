@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WindowsGSM.Functions;
@@ -67,21 +68,34 @@ namespace WindowsGSM.Plugins
                 return null;
             }
 
-            string param = string.IsNullOrWhiteSpace(_serverData.ServerMap) ? string.Empty : _serverData.ServerMap;
-            param += "?listen";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerName) ? string.Empty : $"?SessionName=\"{_serverData.ServerName}\"";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerIP) ? string.Empty : $" ?MultiHome={_serverData.ServerIP}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerPort) ? string.Empty : $" ?Port={_serverData.ServerPort}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer) ? string.Empty : $" ?MaxPlayers={_serverData.ServerMaxPlayer}";
-            param += string.IsNullOrWhiteSpace(_serverData.ServerQueryPort) ? string.Empty : $" ?QueryPort={_serverData.ServerQueryPort}";
-            param += $" {_serverData.ServerParam}";
+            var param = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerMap))
+                param.Append($"{_serverData.ServerMap} ");
+
+            param.Append("?listen");
+
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerName))
+                param.Append($"?SessionName=\"\"\"{_serverData.ServerName}\"\"\"");
+
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerPort))
+                param.Append($"?Port={_serverData.ServerPort}");
+
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerQueryPort))
+                param.Append($"?NitradoQueryPort={_serverData.ServerQueryPort}");
+
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer))
+                param.Append($"?MaxPlayers={_serverData.ServerMaxPlayer}");
+
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerParam))
+                param.Append($"{_serverData.ServerParam}");
 
             Process p = new Process
             {
                 StartInfo =
                 {
                     FileName = shipExePath,
-                    Arguments = param,
+                    Arguments = param.ToString(),
                     WindowStyle = ProcessWindowStyle.Minimized,
                     UseShellExecute = true
                 },
@@ -121,7 +135,6 @@ namespace WindowsGSM.Plugins
         public bool IsInstallValid()
         {
             return File.Exists(Functions.ServerPath.GetServersServerFiles(_serverData.ServerID, StartPath));
-            //return true;
         }
 
         public bool IsImportValid(string path)
@@ -129,7 +142,6 @@ namespace WindowsGSM.Plugins
             string importPath = Path.Combine(path, StartPath);
             Error = $"Invalid Path! Fail to find {Path.GetFileName(StartPath)}";
             return File.Exists(importPath);
-            // return true;
         }
 
         public string GetLocalBuild()
