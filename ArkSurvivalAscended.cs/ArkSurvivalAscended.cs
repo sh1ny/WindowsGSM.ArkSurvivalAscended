@@ -82,7 +82,7 @@ namespace WindowsGSM.Plugins
                 param.Append($"?Port={_serverData.ServerPort}");
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerQueryPort))
-                param.Append($"?NitradoQueryPort={_serverData.ServerQueryPort}");
+                param.Append($"?QueryPort={_serverData.ServerQueryPort}");
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer))
                 param.Append($"?MaxPlayers={_serverData.ServerMaxPlayer}");
