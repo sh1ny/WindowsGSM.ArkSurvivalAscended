@@ -78,6 +78,9 @@ namespace WindowsGSM.Plugins
             if (!string.IsNullOrWhiteSpace(_serverData.ServerName))
                 param.Append($"?SessionName=\"\"\"{_serverData.ServerName}\"\"\"");
 
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerIP))
+                param.Append($"?MultiHome={_serverData.ServerIP}");
+
             if (!string.IsNullOrWhiteSpace(_serverData.ServerPort))
                 param.Append($"?Port={_serverData.ServerPort}");
 
