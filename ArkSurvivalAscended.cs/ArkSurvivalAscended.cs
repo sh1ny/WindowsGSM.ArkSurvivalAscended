@@ -71,7 +71,7 @@ namespace WindowsGSM.Plugins
             var param = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerMap))
-                param.Append($"{_serverData.ServerMap} ");
+                param.Append($"{_serverData.ServerMap}");
 
             param.Append("?listen");
 
@@ -91,7 +91,7 @@ namespace WindowsGSM.Plugins
                 param.Append($"?MaxPlayers={_serverData.ServerMaxPlayer}");
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerParam))
-                param.Append($"{_serverData.ServerParam}");
+                param.Append($" {_serverData.ServerParam}");
 
             Process p = new Process
             {
