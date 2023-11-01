@@ -113,9 +113,10 @@ namespace WindowsGSM.Plugins
         // - Stop server function
         public async Task Stop(Process p)
         {
-            await Task.Run(() =>
             {
-                p.Kill();
+                Functions.ServerConsole.SetMainWindow(p.MainWindowHandle);
+                Functions.ServerConsole.SendWaitToMainWindow("quit");
+                Functions.ServerConsole.SendWaitToMainWindow("{ENTER}");
             });
         }
 
