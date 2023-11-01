@@ -71,7 +71,7 @@ namespace WindowsGSM.Plugins
             var param = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerMap))
-                param.Append($"{_serverData.ServerMap} ");
+                param.Append($" {_serverData.ServerMap}");
 
             param.Append("?listen");
 
@@ -113,6 +113,7 @@ namespace WindowsGSM.Plugins
         // - Stop server function
         public async Task Stop(Process p)
         {
+            await Task.Run(() =>
             {
                 Functions.ServerConsole.SetMainWindow(p.MainWindowHandle);
                 Functions.ServerConsole.SendWaitToMainWindow("quit");
