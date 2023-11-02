@@ -21,7 +21,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.ArkSurvivalAscended", // WindowsGSM.XXXX
             author = "sh1ny",
             description = "WindowsGSM plugin for supporting ArkSurvivalAscended Dedicated Server",
-            version = "1.1",
+            version = "1.2",
             url = "https://github.com/sh1ny/WindowsGSM.ArkSurvivalAscended/", // Github repository link (Best practice)
             color = "#34c9eb" // Color Hex
         };
