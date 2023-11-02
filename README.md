@@ -31,6 +31,8 @@ Look for your changed port listening. If it is, everything works. If it's 7777, 
 
 ## Installing and running mods
 
+EDIT: Please add -automanagedmods as well!!!!
+
 You will need to add the following parameter:
 
 ```
