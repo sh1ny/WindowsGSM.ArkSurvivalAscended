@@ -71,7 +71,7 @@ namespace WindowsGSM.Plugins
             var param = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerMap))
-                param.Append($"{_serverData.ServerMap} ");
+                param.Append($" {_serverData.ServerMap}");
 
             param.Append("?listen");
 
@@ -97,16 +97,6 @@ namespace WindowsGSM.Plugins
                 param.Append($" -WinLiveMaxPlayers={_serverData.ServerMaxPlayer}");
 
             Process p;
-            //     StartInfo =
-            //     {
-            //         FileName = shipExePath,
-            //         Arguments = param.ToString(),
-            //         WindowStyle = ProcessWindowStyle.Minimized,
-            //         UseShellExecute = true
-            //     },
-            //     EnableRaisingEvents = true
-            // };
-            // p.Start();
             if (!AllowsEmbedConsole)
             {
                 p = new Process
