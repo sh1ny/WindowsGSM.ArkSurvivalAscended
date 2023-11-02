@@ -21,7 +21,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.ArkSurvivalAscended", // WindowsGSM.XXXX
             author = "sh1ny",
             description = "WindowsGSM plugin for supporting ArkSurvivalAscended Dedicated Server",
-            version = "1.2",
+            version = "1.21",
             url = "https://github.com/sh1ny/WindowsGSM.ArkSurvivalAscended/", // Github repository link (Best practice)
             color = "#34c9eb" // Color Hex
         };
@@ -91,7 +91,10 @@ namespace WindowsGSM.Plugins
                 param.Append($"?MaxPlayers={_serverData.ServerMaxPlayer}");
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerParam))
-                param.Append($"{_serverData.ServerParam}");
+                if(_serverData.ServerParam.StartsWith("?"))
+                    param.Append($"{_serverData.ServerParam}");
+                else if (_serverData.ServerParam.StartsWith("-"))
+                    param.Append($" {_serverData.ServerParam}");
 
             if (!string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer))
                 param.Append($" -WinLiveMaxPlayers={_serverData.ServerMaxPlayer}");
