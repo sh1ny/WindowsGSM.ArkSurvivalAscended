@@ -21,7 +21,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.ArkSurvivalAscended", // WindowsGSM.XXXX
             author = "sh1ny",
             description = "WindowsGSM plugin for supporting ArkSurvivalAscended Dedicated Server",
-            version = "1.0",
+            version = "1.1",
             url = "https://github.com/sh1ny/WindowsGSM.ArkSurvivalAscended/", // Github repository link (Best practice)
             color = "#34c9eb" // Color Hex
         };
@@ -39,7 +39,7 @@ namespace WindowsGSM.Plugins
         // - Game server Fixed variables
         public string StartPath = @"ShooterGame\Binaries\Win64\ArkAscendedServer.exe"; // Game server start path
         public string FullName = "ArkSurvivalAscended Dedicated Server"; // Game server FullName
-        public bool AllowsEmbedConsole = false;  // Does this server support output redirect?
+        public bool AllowsEmbedConsole = true;  // Does this server support output redirect?
         public int PortIncrements = 2; // This tells WindowsGSM how many ports should skip after installation
         public object QueryMethod = new A2S(); // Query method should be use on current server type. Accepted value: null or new A2S() or new FIVEM() or new UT3()
 
@@ -93,18 +93,58 @@ namespace WindowsGSM.Plugins
             if (!string.IsNullOrWhiteSpace(_serverData.ServerParam))
                 param.Append($"{_serverData.ServerParam}");
 
-            Process p = new Process
+            if (!string.IsNullOrWhiteSpace(_serverData.ServerMaxPlayer))
+                param.Append($" -WinLiveMaxPlayers={_serverData.ServerMaxPlayer}");
+
+            Process p;
+            //     StartInfo =
+            //     {
+            //         FileName = shipExePath,
+            //         Arguments = param.ToString(),
+            //         WindowStyle = ProcessWindowStyle.Minimized,
+            //         UseShellExecute = true
+            //     },
+            //     EnableRaisingEvents = true
+            // };
+            // p.Start();
+            if (!AllowsEmbedConsole)
             {
-                StartInfo =
+                p = new Process
                 {
-                    FileName = shipExePath,
-                    Arguments = param.ToString(),
-                    WindowStyle = ProcessWindowStyle.Minimized,
-                    UseShellExecute = true
-                },
-                EnableRaisingEvents = true
-            };
-            p.Start();
+                    StartInfo =
+                    {
+                        FileName = shipExePath,
+                        Arguments = param.ToString(),
+                        WindowStyle = ProcessWindowStyle.Minimized,
+                        UseShellExecute = false
+                    },
+                    EnableRaisingEvents = true
+                };
+                p.Start();
+            }
+            else
+            {
+                p = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = shipExePath,
+                        Arguments = param.ToString(),
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = false,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    },
+                    EnableRaisingEvents = true
+                };
+                var serverConsole = new Functions.ServerConsole(_serverData.ServerID);
+                p.OutputDataReceived += serverConsole.AddOutput;
+                p.ErrorDataReceived += serverConsole.AddOutput;
+                p.Start();
+                p.BeginOutputReadLine();
+                p.BeginErrorReadLine();
+            }
 
             return p;
         }
@@ -113,9 +153,19 @@ namespace WindowsGSM.Plugins
         // - Stop server function
         public async Task Stop(Process p)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                p.Kill();
+                if (p.StartInfo.CreateNoWindow)
+                {
+                    p.CloseMainWindow();
+                }
+                else
+                {
+                    Functions.ServerConsole.SetMainWindow(p.MainWindowHandle);
+                    Functions.ServerConsole.SendWaitToMainWindow("quit");
+                    Functions.ServerConsole.SendWaitToMainWindow("{ENTER}");
+                    await Task.Delay(6000);
+                }
             });
         }
 
