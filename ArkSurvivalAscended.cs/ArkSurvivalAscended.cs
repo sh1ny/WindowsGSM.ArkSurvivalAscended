@@ -21,7 +21,7 @@ namespace WindowsGSM.Plugins
             name = "WindowsGSM.ArkSurvivalAscended", // WindowsGSM.XXXX
             author = "sh1ny",
             description = "WindowsGSM plugin for supporting ArkSurvivalAscended Dedicated Server",
-            version = "1.21",
+            version = "1.22",
             url = "https://github.com/sh1ny/WindowsGSM.ArkSurvivalAscended/", // Github repository link (Best practice)
             color = "#34c9eb" // Color Hex
         };
@@ -41,8 +41,36 @@ namespace WindowsGSM.Plugins
         public string FullName = "ArkSurvivalAscended Dedicated Server"; // Game server FullName
         public bool AllowsEmbedConsole = true;  // Does this server support output redirect?
         public int PortIncrements = 2; // This tells WindowsGSM how many ports should skip after installation
-        public object QueryMethod = new A2S(); // Query method should be use on current server type. Accepted value: null or new A2S() or new FIVEM() or new UT3()
+        public object QueryMethod { get; } = CreateQueryMethod(); // Prefer EOS when available; fall back safely when missing.
+        private static object CreateQueryMethod()
+        {
+            const string eosTypeName = "WindowsGSM.GameServer.Query.EOS";
+            try
+            {
+                var queryAssembly = typeof(A2S).Assembly;
+                var eosType = queryAssembly.GetType(eosTypeName, throwOnError: false, ignoreCase: false);
+                if (eosType == null)
+                {
+                    return new A2S();
+                }
 
+                // new EOS (epic online services) server query added to WindowsGSM https://github.com/Raziel7893/WindowsGSM
+                // EOS(string ClientId, string clientSecret, string deploymentId, bool authByExternalToken, bool wildcardMatchmaking)
+                var instance = Activator.CreateInstance(
+                    eosType,
+                    "xyza7891muomRmynIIHaJB9COBKkwj6n",
+                    "PP5UGxysEieNfSrEicaD1N2Bb3TdXuD7xHYcsdUHZ7s",
+                    "ad9a8feffb3b4b2ca315546f038c3ae2",
+                    false,
+                    true);
+
+                return instance ?? new A2S();
+            }
+            catch
+            {
+                return new A2S();
+            }
+        }
 
         // - Game server default values
         public string Port = "7777"; // Default port
@@ -157,7 +185,7 @@ namespace WindowsGSM.Plugins
                     Functions.ServerConsole.SetMainWindow(p.MainWindowHandle);
                     Functions.ServerConsole.SendWaitToMainWindow("quit");
                     Functions.ServerConsole.SendWaitToMainWindow("{ENTER}");
-                    await Task.Delay(6000);
+                    await Task.Delay(12000);
                 }
             });
         }
